@@ -176,7 +176,7 @@ def myModel():
 ############################### TRAIN
 model = myModel()
 print(model.summary())
-history=model.fit_generator(dataGen.flow(X_train,y_train,batch_size=batch_size_val),steps_per_epoch=steps_per_epoch_val,epochs=epochs_val,validation_data=(X_validation,y_validation),shuffle=1)
+history=model.fit(dataGen.flow(X_train,y_train,batch_size=batch_size_val),epochs=epochs_val,validation_data=(X_validation,y_validation),shuffle=1)
  
 ############################### PLOT
 plt.figure(1)
