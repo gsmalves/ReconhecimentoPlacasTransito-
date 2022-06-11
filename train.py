@@ -17,12 +17,12 @@ from keras.preprocessing.image import ImageDataGenerator
  
 ################# Parameters #####################
  
-path = "myData" # folder with all the class folders
+path = "dataset" # folder with all the class folders
 labelFile = 'labels.csv' # file with all names of classes
 batch_size_val=50  # how many to process together
 steps_per_epoch_val=2000
 epochs_val=10
-imageDimesions = (32,32,3)
+imageDimesions = (120,120,3)
 testRatio = 0.2    # if 1000 images split will 200 for testing
 validationRatio = 0.2 # if 1000 images 20% of remaining 800 will be 160 for validation
 ###################################################
@@ -71,7 +71,6 @@ assert(X_test.shape[1:]==(imageDimesions))," The dimesionas of the Test images a
 ############################### READ CSV FILE
 data=pd.read_csv(labelFile)
 print("data shape ",data.shape,type(data))
- 
 ############################### DISPLAY SOME SAMPLES IMAGES  OF ALL THE CLASSES
 num_of_samples = []
 cols = 5
@@ -150,7 +149,7 @@ y_test = to_categorical(y_test,noOfClasses)
 def myModel():
     no_Of_Filters=60
     size_of_Filter=(5,5) # THIS IS THE KERNEL THAT MOVE AROUND THE IMAGE TO GET THE FEATURES.
-                         # THIS WOULD REMOVE 2 PIXELS FROM EACH BORDER WHEN USING 32 32 IMAGE
+                         # THIS WOULD REMOVE 2 PIXELS FROM EACH BORDER WHEN USING 120 120 IMAGE
     size_of_Filter2=(3,3)
     size_of_pool=(2,2)  # SCALE DOWN ALL FEATURE MAP TO GERNALIZE MORE, TO REDUCE OVERFITTING
     no_Of_Nodes = 500   # NO. OF NODES IN HIDDEN LAYERS
