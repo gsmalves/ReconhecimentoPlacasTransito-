@@ -5,23 +5,27 @@ import pandas as pd
 
 #############################################
  
-frameWidth= 640         # CAMERA RESOLUTION
+frameWidth= 640         # RELOSUÇÃO DE IMAGENS
 frameHeight = 480
 brightness = 180
-threshold = 0.75         # PROBABLITY THRESHOLD
+threshold = 0.75         # PROBABILDADE THRESHOLD
 font = cv2.FONT_HERSHEY_SIMPLEX
 ##############################################
-labelFile = 'labels.csv' # file with all names of classes
+labelFile = 'labels.csv' # ARQUIVO COM NOMES DE CADA CLASSE
 labelData=pd.read_csv(labelFile)
 
-# SETUP THE VIDEO CAMERA
+# SETUP DA CAMERA
 cap = cv2.VideoCapture(0)
 cap.set(3, frameWidth)
 cap.set(4, frameHeight)
 cap.set(10, brightness)
-# IMPORT THE TRANNIED MODEL
-pickle_in=open("model_trained.p","rb")  ## rb = READ BYTE
-model=pickle.load(pickle_in)
+# IMPORTANDO O ARQUIVO DE TREINAMENTO
+# pickle_in=open('model_trained.p',"rb")  ## rb = READ BYTE
+# model=pickle.load(pickle_in)
+filename = 'model_trained.p'
+with open(filename, 'rb') as file:  
+    model = pickle.load(file)
+
  
 def grayscale(img):
     img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
@@ -39,18 +43,18 @@ def getCalssName(classNo):
     
 while True:
 
-    # READ IMAGE
+    # LER A IMAGEM DA CAMERA
     success, imgOrignal = cap.read()
     
-    # PROCESS IMAGE
+    # PROCESSa IMAGEM
     img = np.asarray(imgOrignal)
     img = cv2.resize(img, (120, 120))
     img = preprocessing(img)
-    cv2.imshow("Processed Image", img)
+    cv2.imshow("Imagem processada", img)
     img = img.reshape(1, 120, 120, 1)
-    cv2.putText(imgOrignal, "CLASS: " , (20, 35), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
-    cv2.putText(imgOrignal, "PROBABILITY: ", (20, 75), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
-    # PREDICT IMAGE
+    cv2.putText(imgOrignal, "CLASSE: " , (20, 35), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
+    cv2.putText(imgOrignal, "PROBABABILIDADE: ", (20, 75), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
+    # PREDIÇÃO DA IMAGEM
     predictions = model.predict(img)
     classIndex = np.argmax(model.predict(img), axis=-1)
     probabilityValue =np.amax(predictions)
@@ -58,7 +62,7 @@ while True:
         #print(getCalssName(classIndex))
         cv2.putText(imgOrignal,str(classIndex)+" "+str(getCalssName(classIndex)), (120, 35), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
         cv2.putText(imgOrignal, str(round(probabilityValue*100,2) )+"%", (180, 75), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
-        cv2.imshow("Result", imgOrignal)
+        cv2.imshow("Resultado", imgOrignal)
         
     if cv2.waitKey(1) and 0xFF == ord('q'):
         break
