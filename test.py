@@ -38,9 +38,14 @@ def preprocessing(img):
     img = equalize(img)
     img = img/255
     return img
-def getCalssName(classNo):
-    return labelData.iloc[classNo]["Name"]
-    
+def getClassName(classNo):
+    classNames = np.loadtxt(fname=labelFile, delimiter=',', dtype='str', skiprows=1)
+    #get class name from class no using labels.csv
+    for classT in classNames:
+        print( classT[0], classNo[0])
+        if classT[0]==str(classNo[0]):
+            return classT[1]
+    return ''
 while True:
 
     # LER A IMAGEM DA CAMERA
@@ -53,16 +58,19 @@ while True:
     cv2.imshow("Imagem processada", img)
     img = img.reshape(1, 120, 120, 1)
     cv2.putText(imgOrignal, "CLASSE: " , (20, 35), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
-    cv2.putText(imgOrignal, "PROBABABILIDADE: ", (20, 75), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
+    cv2.putText(imgOrignal, "PROB.: ", (20, 75), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
     # PREDIÇÃO DA IMAGEM
     predictions = model.predict(img)
     classIndex = np.argmax(model.predict(img), axis=-1)
     probabilityValue =np.amax(predictions)
     if probabilityValue > threshold:
-        #print(getCalssName(classIndex))
-        cv2.putText(imgOrignal,str(classIndex)+" "+str(getCalssName(classIndex)), (120, 35), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
+        #print(getClassName(classIndex))
+        cv2.putText(imgOrignal,str(getClassName(classIndex)), (120, 35), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
         cv2.putText(imgOrignal, str(round(probabilityValue*100,2) )+"%", (180, 75), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
         cv2.imshow("Resultado", imgOrignal)
-        
+    elif probabilityValue < threshold/2:
+        cv2.putText(imgOrignal,'', (120, 35), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
+        cv2.putText(imgOrignal, '', (180, 75), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
+        cv2.imshow("Resultado", imgOrignal)
     if cv2.waitKey(1) and 0xFF == ord('q'):
         break
