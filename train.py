@@ -20,7 +20,6 @@ from keras.preprocessing.image import ImageDataGenerator
 path = "dataset" # pasta com todos as imagens do dataset
 labelFile = 'labels.csv' # arquivo com os nomes dos arquivos de imagens
 batch_size_val=50  # quantos processar juntos
-steps_per_epoch_val=2000
 epochs_val=10
 imageDimesions = (120,120,3)
 testRatio = 0.2    #se 1000 forem divididas , 200 serão para teste 
@@ -151,7 +150,7 @@ def myModel():
     size_of_Filter=(5,5) # Kernel que se move na imagem para achar as caracteristicas
     size_of_Filter2=(3,3)
     size_of_pool=(2,2)  # REDUZIR TODO O MAPA DE RECURSOS PARA GERNALIZAR MAIS, PARA REDUZIR O OVERFITTING
-    no_Of_Nodes = 500   # NÚMERO DE NÓS NA CAMADA INTERMEDIÁRIA
+    no_Of_Nodes = 250   # NÚMERO DE NÓS NA CAMADA INTERMEDIÁRIA
     model= Sequential()
     model.add((Conv2D(no_Of_Filters,size_of_Filter,input_shape=(imageDimesions[0],imageDimesions[1],1),activation='relu')))#ADICIONAR MAIS CAMADAS DE CONVOLUÇÃO = MENOS RECURSOS, MAS PODE CAUSAR AUMENTO DA PRECISÃO
     model.add((Conv2D(no_Of_Filters, size_of_Filter, activation='relu')))
