@@ -13,6 +13,7 @@ import os
 import pandas as pd
 import random
 from keras.preprocessing.image import ImageDataGenerator
+from classes.SegmentImage import SegmentImage
  
  
 ################# Parametros#####################
@@ -22,8 +23,8 @@ labelFile = 'labels.csv' # arquivo com os nomes dos arquivos de imagens
 batch_size_val=50  # quantos processar juntos
 epochs_val=10
 imageDimesions = (120,120,3)
-testRatio = 0.2    #se 1000 forem divididas , 200 serão para teste 
-validationRatio = 0.2 # 205 das restantes serão para a validação
+testRatio = 0.1    #se 1000 forem divididas , 200 serão para teste 
+validationRatio = 0.1 # 205 das restantes serão para a validação
 ###################################################
  
  
@@ -39,7 +40,8 @@ for x in range (0,len(myList)):
     myPicList = os.listdir(path+"/"+str(count))
     for y in myPicList:
         curImg = cv2.imread(path+"/"+str(count)+"/"+y)
-        images.append(curImg)
+        segmentImage = SegmentImage(curImg)
+        images.append(segmentImage.segment())
         classNo.append(count)
     print(count, end =" ")
     count +=1
