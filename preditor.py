@@ -10,7 +10,7 @@ import sys
 path = Path(sys.path[0])
 caminhoImagem = str(path.absolute()) + '/video.mp4'
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(caminhoImagem)
 #############################################
  # Armazena os frames por segundo do vídeo
 # fps = cap.get(cv2.CAP_PROP_FPS)
@@ -54,20 +54,28 @@ def getClassName(classNo):
     classNames = np.loadtxt(fname=labelFile, delimiter=',', dtype='str', skiprows=1)
     #get class name from class no using labels.csv
     for classT in classNames:
-        print( classT[0], classNo[0])
         if classT[0]==str(classNo[0]):
             return classT[1]
     return ''
+frame_counter=0
 while True:
-
+    frame_counter += 1
+    if (frame_counter == cap.get(cv2.CAP_PROP_FRAME_COUNT)):
+        frame_counter = 0
+        cap.set(cv2.CAP_PROP_POS_FRAMES, 0) 
     # LER A IMAGEM DA CAMERA
     success, imgOrignal = cap.read()
+    scale_percent = 50
+    width = int(imgOrignal.shape[1] * scale_percent / 100)
+    height = int(imgOrignal.shape[0] * scale_percent / 100)
+    tamanho = (width, height)
+
+    imgOrignal = cv2.resize(imgOrignal, tamanho, cv2.INTER_LINEAR)
     if not success:
         break  
     
     segmentImage = SegmentImage(imgOrignal)
     # PROCESSa IMAGEM
-    print(imgOrignal)
     img = segmentImage.segment()
     # img = cv2.resize(img, (120, 120))
     # img = preprocessing(img)

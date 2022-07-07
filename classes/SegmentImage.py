@@ -13,11 +13,12 @@ class SegmentImage:
 
     def segment(self):
         image = self.image
+        
         houghCircles = np.zeros(image.shape[0:2])
 
         # result = img_pl
-        circles = cv2.HoughCircles(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY),cv2.HOUGH_GRADIENT,1,50,
-        param1=100,param2=30,minRadius=25, maxRadius=60)
+        circles = cv2.HoughCircles(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY),cv2.HOUGH_GRADIENT,1,image.shape[0]/64,
+        param1=100,param2=30, minRadius=5, maxRadius=30)
         if circles is not None:
             circles = np.uint16(np.around(circles))
 
@@ -28,9 +29,9 @@ class SegmentImage:
         
         
         low_red1 = np.array([0, 120, 70])
-        high_red1 = np.array([20, 255, 255])
-        low_red2 = np.array([150, 120, 70])
-        high_red2 = np.array([255, 255, 255])
+        high_red1 = np.array([10, 255, 255])
+        low_red2 = np.array([170, 120, 70])
+        high_red2 = np.array([180, 255, 255])
         sensitivity = 15
         lower_white = np.array([0,0,255-sensitivity])
         upper_white = np.array([255,sensitivity,255])
@@ -44,9 +45,10 @@ class SegmentImage:
         
 
         elem2 = cv2.getStructuringElement(
-            cv2.MORPH_RECT, (2, 2))  # Elemento estruturante
+            cv2.MORPH_RECT, (5, 5))  # Elemento estruturante
 
         image_threshold = cv2.morphologyEx(image_threshold, cv2.MORPH_DILATE, elem2)
+ 
  
         # Preenchimento
         res = cv2.findContours(
@@ -81,25 +83,6 @@ class SegmentImage:
                 bounding_rect = cv2.boundingRect(res[i])
                 cv2.rectangle(image, bounding_rect,  (0,0,255), 2, 8, 0)
 
-        # Desenha o contorno e retângulo
-        # cv2.drawContours( frame, contours, largest_contour_index, color, cv2.BORDER_TRANSPARENT, 8)
-        
-        # stop_data = cv2.CascadeClassifier('train/2.xml')
-
-        # found = stop_data.detectMultiScale(result, minSize=(20, 20))
-        # # Don't do anything if there's
-        # # no sign
-        # amount_found = len(found)
-
-        # if amount_found != 0:
-
-        #     # There may be more than one
-        #     # sign in the image
-        #     for (x, y, width, height) in found:
-
-        #         # We draw a green rectangle around
-        #         # every recognized sign
-        #         cv2.rectangle(result, (x, y), (x + height, y + width), (0, 255, 0), 5)
         cv2.imshow('Imagem segmentada', result)
         cv2.imshow('Filter HSV', img_pl)
         cv2.imshow('Filter HoughCircles', houghCircles)
