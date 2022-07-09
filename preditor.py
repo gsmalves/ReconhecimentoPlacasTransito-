@@ -21,7 +21,7 @@ fps = int(60/cap.get(cv2.CAP_PROP_FPS))
 # # Armazena as linhas do vídeo
 # frameHeight = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
 brightness = 180
-threshold = 0.75         # PROBABILDADE THRESHOLD
+threshold = 0.30         # PROBABILDADE THRESHOLD
 font = cv2.FONT_HERSHEY_SIMPLEX
 ##############################################
 labelFile = 'labels.csv' # ARQUIVO COM NOMES DE CADA CLASSE
@@ -65,7 +65,7 @@ while True:
         cap.set(cv2.CAP_PROP_POS_FRAMES, 0) 
     # LER A IMAGEM DA CAMERA
     success, imgOrignal = cap.read()
-    scale_percent = 50
+    scale_percent = 40
     width = int(imgOrignal.shape[1] * scale_percent / 100)
     height = int(imgOrignal.shape[0] * scale_percent / 100)
     tamanho = (width, height)

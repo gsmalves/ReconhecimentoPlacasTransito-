@@ -14,20 +14,6 @@ class SegmentImage:
     def segment(self):
         image = self.image
         
-        houghCircles = np.zeros(image.shape[0:2])
-
-        # result = img_pl
-        circles = cv2.HoughCircles(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY),cv2.HOUGH_GRADIENT,1,image.shape[0]/64,
-        param1=100,param2=30, minRadius=5, maxRadius=30)
-        if circles is not None:
-            circles = np.uint16(np.around(circles))
-
-            for i in circles[0,:]:
-                # draw the outer circle
-                cv2.circle(houghCircles,(i[0],i[1]),i[2] + 10,(255,255,255),-1)
-
-        
-        
         low_red1 = np.array([0, 120, 70])
         high_red1 = np.array([10, 255, 255])
         low_red2 = np.array([170, 120, 70])
@@ -45,9 +31,28 @@ class SegmentImage:
         
 
         elem2 = cv2.getStructuringElement(
-            cv2.MORPH_RECT, (5, 5))  # Elemento estruturante
+            cv2.MORPH_ELLIPSE, (10, 10))  # Elemento estruturante
 
         image_threshold = cv2.morphologyEx(image_threshold, cv2.MORPH_DILATE, elem2)
+        params = cv2.SimpleBlobDetector_Params()
+
+        params.filterByArea = True
+        params.minArea = 5
+        
+        # Filter by Circularity
+        params.filterByCircularity = True
+        params.minCircularity = 0.9
+
+        params.filterByConvexity = True
+        params.minConvexity = 0.2
+        detector = cv2.SimpleBlobDetector_create(params)
+        image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        keypoints = detector.detect(image_gray)
+
+        blobs = np.zeros(image.shape)
+        for x in range(1,len(keypoints)):
+            blobs=cv2.circle(blobs, (np.int(keypoints[x].pt[0]),np.int(keypoints[x].pt[1])), radius=np.int(keypoints[x].size), color=(255), thickness=-1)
+
  
  
         # Preenchimento
@@ -58,10 +63,11 @@ class SegmentImage:
         img_pl = np.zeros(image.shape[0:2])
         cv2.fillPoly(img_pl, pts=contours, color=255)
 
+        blobs_ = cv2.inRange(blobs,255,255)
         
         # Objetos circulares e com bordar vermelha
         threshold_circle_red = cv2.bitwise_and(
-        houghCircles.astype(np.uint8), img_pl.astype(np.uint8))
+        blobs_, img_pl.astype(np.uint8))
 
         result = np.zeros(threshold_circle_red.shape)
         res = res[0] if len(res) == 2 else res[1]
@@ -83,9 +89,9 @@ class SegmentImage:
                 bounding_rect = cv2.boundingRect(res[i])
                 cv2.rectangle(image, bounding_rect,  (0,0,255), 2, 8, 0)
 
-        cv2.imshow('Imagem segmentada', result)
+        cv2.imshow('Imagem segmentada', threshold_circle_red)
         cv2.imshow('Filter HSV', img_pl)
-        cv2.imshow('Filter HoughCircles', houghCircles)
+        cv2.imshow('Filter HoughCircles', blobs)
 
 
         return result
