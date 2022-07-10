@@ -22,7 +22,7 @@ cap.set(10, brightness)
 # IMPORTANDO O ARQUIVO DE TREINAMENTO
 # pickle_in=open('model_trained.p',"rb")  ## rb = READ BYTE
 # model=pickle.load(pickle_in)
-filename = 'model_trained.p'
+filename = './model_trained.p'
 with open(filename, 'rb') as file:  
     model = pickle.load(file)
 

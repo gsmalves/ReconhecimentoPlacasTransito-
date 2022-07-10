@@ -23,7 +23,7 @@ batch_size_val=50  # quantos processar juntos
 epochs_val=10
 imageDimesions = (120,120,3)
 testRatio = 0.2    #se 1000 forem divididas , 200 serão para teste 
-validationRatio = 0.2 # 205 das restantes serão para a validação
+validationRatio = 0.2 # 200 das restantes serão para a validação
 ###################################################
  
  
