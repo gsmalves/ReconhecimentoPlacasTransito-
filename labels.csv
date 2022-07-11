@@ -1,17 +1,15 @@
 ClassId,Name
 
-0,Lombada
-1,Pare
-2,Proibido estacionar
-3,Proibido parar e estacionar
-4,Proibido retornar a esquerda
-5,Proibido virar a direita
-6,Proibido virar a esquerda
-7,Rotatoria
-8,Rotatoria a frente
-9,Siga em frente
-10,Siga em frente ou a direita
-11,Siga em frente ou a esquerda
-12,Velocidade maxima 40km/h
-13,Velocidade maxima 50km/h
-14,Velocidade maxima 60km/h
+0,Pare
+1,Proibido estacionar
+2,Proibido parar e estacionar
+3,Proibido retornar a esquerda
+4,Proibido virar a direita
+5,Proibido virar a esquerda
+6,Rotatoria
+7,Siga em frente
+8,Siga em frente ou a direita
+9,Siga em frente ou a esquerda
+10,Velocidade maxima 40km/h
+11,Velocidade maxima 50km/h
+12,Velocidade maxima 60km/h

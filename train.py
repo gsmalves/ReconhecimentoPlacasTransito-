@@ -13,6 +13,7 @@ import os
 import pandas as pd
 import random
 from keras.preprocessing.image import ImageDataGenerator
+from classes.SegmentImage import SegmentImage
  
  
 ################# Parametros#####################
@@ -39,7 +40,8 @@ for x in range (0,len(myList)):
     myPicList = os.listdir(path+"/"+str(count))
     for y in myPicList:
         curImg = cv2.imread(path+"/"+str(count)+"/"+y)
-        images.append(curImg)
+        segmentImage = SegmentImage(curImg)
+        images.append(segmentImage.segment())
         classNo.append(count)
     print(count, end =" ")
     count +=1
