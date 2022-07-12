@@ -1,4 +1,4 @@
-#Segmentação de sinais de placas de trânsito .
+# Segmentação de sinais de placas de trânsito .
 ## Pré-requisitos
 
 Para rodar a aplicação web, você vai precisar ter instalado:
