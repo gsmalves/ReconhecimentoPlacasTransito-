@@ -24,25 +24,26 @@ class SegmentImage:
         
         image_threshold = mask1 + mask2
         
-        #Aplica o filtro de dilatação
+
+        #Aplica o filtro de dilatação para melhorar a segmentação
         elem2 = cv2.getStructuringElement(
             cv2.MORPH_RECT, (5, 5))  # Elemento estruturante
 
         image_threshold = cv2.morphologyEx(image_threshold, cv2.MORPH_DILATE, elem2)
  
  
-        # Preenchimento de buracos
+        # Preenchimento de buracos 
         res = cv2.findContours(
             image_threshold, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
         
 
-
-        contours = res[-2]  # for cv2 v3 and v4+ compatibility
+        # Encontra os contornos
+        contours = res[-2]  
         img_pl = np.zeros(image.shape[0:2])
         cv2.fillPoly(img_pl, pts=contours, color=255)
         houghCircles = np.zeros(image.shape[0:2])
 
-        # Pegar da imagem original os pontos com contornos vermelhos
+        # Pega da imagem original os pontos com contornos vermelhos
         img_red = cv2.bitwise_and(image, image, mask=img_pl.astype(np.uint8))
 
         

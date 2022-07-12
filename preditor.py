@@ -23,7 +23,7 @@ while True:
     if (frame_counter == cap.get(cv2.CAP_PROP_FRAME_COUNT)):
         frame_counter = 0
         cap.set(cv2.CAP_PROP_POS_FRAMES, 0) 
-    # LER A IMAGEM DA CAMERA
+    
     success, img_original = cap.read()
     scale_percent = 100
     width = int(img_original.shape[1] * scale_percent / 100)
